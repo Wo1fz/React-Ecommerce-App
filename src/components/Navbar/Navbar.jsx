@@ -4,10 +4,9 @@ import {
   Toolbar,
   IconButton,
   Badge,
-  MenuItem,
-  Menu,
   Typography,
 } from '@material-ui/core'
+// MenuItem, Menu,
 import { ShoppingCart } from '@material-ui/icons'
 import logo from '../../assets/cat.png'
 import useStyles from './styles'
