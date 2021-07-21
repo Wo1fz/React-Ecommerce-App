@@ -1,5 +1,5 @@
 import React from 'react'
-import { Products, Navbar, Cart } from './components'
+import { Products, Navbar, Cart, Checkout } from './components'
 import { useGlobalContext } from './context'
 
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
@@ -20,6 +20,9 @@ const App = () => {
               handleUpdateCartQty={handleUpdateCartQty}
               handleRemoveFromCart={handleRemoveFromCart}
             />
+          </Route>
+          <Route exact path='/checkout'>
+            <Checkout />
           </Route>
         </Switch>
       </div>
