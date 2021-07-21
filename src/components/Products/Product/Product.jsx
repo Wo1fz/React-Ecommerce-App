@@ -9,9 +9,11 @@ import {
 } from '@material-ui/core'
 import { AddShoppingCart } from '@material-ui/icons'
 import useStyles from './styles'
+import { useGlobalContext } from '../../../context'
 
-const Product = ({ product, onAddToCart }) => {
+const Product = ({ product }) => {
   const classes = useStyles()
+  const { handleAddToCart } = useGlobalContext()
 
   return (
     <Card className={classes.root}>
@@ -38,7 +40,7 @@ const Product = ({ product, onAddToCart }) => {
       <CardActions disableSpacing className={classes.cardActions}>
         <IconButton
           aria-label='Add to Cart'
-          onClick={() => onAddToCart(product.id, 1)}
+          onClick={() => handleAddToCart(product.id, 1)}
         >
           <AddShoppingCart />
         </IconButton>

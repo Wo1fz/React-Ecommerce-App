@@ -8,9 +8,11 @@ import {
   CardMedia,
 } from '@material-ui/core'
 import useStyles from './styles'
+import { useGlobalContext } from '../../../context'
 
-const CartItem = ({ item, onUpdateCartQty, onRemoveFromCart }) => {
+const CartItem = ({ item }) => {
   const classes = useStyles()
+  const { handleUpdateCartQty, handleRemoveFromCart } = useGlobalContext()
 
   return (
     <Card>
@@ -30,7 +32,7 @@ const CartItem = ({ item, onUpdateCartQty, onRemoveFromCart }) => {
           <Button
             type='button'
             size='small'
-            onClick={() => onUpdateCartQty(item.id, item.quantity - 1)}
+            onClick={() => handleUpdateCartQty(item.id, item.quantity - 1)}
           >
             -
           </Button>
@@ -38,7 +40,7 @@ const CartItem = ({ item, onUpdateCartQty, onRemoveFromCart }) => {
           <Button
             type='button'
             size='small'
-            onClick={() => onUpdateCartQty(item.id, item.quantity + 1)}
+            onClick={() => handleUpdateCartQty(item.id, item.quantity + 1)}
           >
             +
           </Button>
@@ -47,7 +49,7 @@ const CartItem = ({ item, onUpdateCartQty, onRemoveFromCart }) => {
           variant='contained'
           type='button'
           color='secondary'
-          onClick={() => onRemoveFromCart(item.id)}
+          onClick={() => handleRemoveFromCart(item.id)}
         >
           Remove
         </Button>

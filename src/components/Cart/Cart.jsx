@@ -3,14 +3,11 @@ import { Container, Typography, Button, Grid } from '@material-ui/core'
 import useStyles from './styles'
 import CartItem from './CartItem/CartItem'
 import { Link } from 'react-router-dom'
+import { useGlobalContext } from '../../context'
 
-const Cart = ({
-  cart,
-  handleUpdateCartQty,
-  handleRemoveFromCart,
-  handleEmptyCart,
-}) => {
+const Cart = () => {
   const classes = useStyles()
+  const { cart, handleEmptyCart } = useGlobalContext()
 
   const EmptyCart = () => (
     <Typography variant='subtitle1'>
@@ -27,11 +24,7 @@ const Cart = ({
       <Grid container spacing={3}>
         {cart.line_items.map((item) => (
           <Grid item xs={12} sm={4} key={item.id}>
-            <CartItem
-              item={item}
-              onUpdateCartQty={handleUpdateCartQty}
-              onRemoveFromCart={handleRemoveFromCart}
-            />
+            <CartItem item={item} />
           </Grid>
         ))}
       </Grid>
