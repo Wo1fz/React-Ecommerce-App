@@ -24,7 +24,7 @@ const Product = ({ product }) => {
       />
       <CardContent>
         <div className={classes.cardContent}>
-          <Typography variant='h6' gutterButton>
+          <Typography variant='h6' gutterBottom>
             {product.name}
           </Typography>
           <Typography variant='h6'>
