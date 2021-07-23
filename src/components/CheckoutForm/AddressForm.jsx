@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   InputLabel,
   Select,
@@ -21,13 +21,13 @@ const AddressForm = ({ checkoutToken, next }) => {
   const [shippingOptions, setShippingOptions] = useState([])
   const [shippingOption, setShippingOption] = useState('')
 
-  const fetchShippingCountries = useCallback(async (checkoutTokenId) => {
+  const fetchShippingCountries = async (checkoutTokenId) => {
     const { countries } = await commerce.services.localeListShippingCountries(
       checkoutTokenId
     )
     setShippingCountries(countries)
     setShippingCountry(Object.keys(countries)[0])
-  }, [])
+  }
 
   const fetchSubdivisions = async (countryCode) => {
     const { subdivisions } = await commerce.services.localeListSubdivisions(
@@ -54,7 +54,7 @@ const AddressForm = ({ checkoutToken, next }) => {
 
   useEffect(() => {
     fetchShippingCountries(checkoutToken.id)
-  }, [fetchShippingCountries])
+  }, [checkoutToken.id])
 
   useEffect(() => {
     if (shippingCountry) fetchSubdivisions(shippingCountry)
@@ -67,7 +67,7 @@ const AddressForm = ({ checkoutToken, next }) => {
         shippingCountry,
         shippingSubdivision
       )
-  }, [shippingCountry, shippingSubdivision])
+  }, [shippingCountry, shippingSubdivision, checkoutToken.id])
 
   return (
     <>

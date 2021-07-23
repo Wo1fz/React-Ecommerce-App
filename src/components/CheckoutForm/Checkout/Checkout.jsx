@@ -41,7 +41,7 @@ const Checkout = () => {
     }
 
     generateToken()
-  }, [cart])
+  }, [cart, history])
 
   const nextStep = () => setActiveStep((prevActiveStep) => prevActiveStep + 1)
   const backStep = () => setActiveStep((prevActiveStep) => prevActiveStep - 1)
@@ -51,7 +51,7 @@ const Checkout = () => {
     nextStep()
   }
 
-  const Confirmation = () =>
+  let Confirmation = () =>
     order.customer ? (
       <>
         <div>
