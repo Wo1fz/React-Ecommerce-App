@@ -5,7 +5,9 @@ const AppContext = React.createContext()
 
 const AppProvider = ({ children }) => {
   const [products, setProducts] = useState([])
-  const [cart, setCart] = useState([])
+  const [cart, setCart] = useState({})
+  const [order, setOrder] = useState({})
+  const [errorMessage, setErrorMessage] = useState('')
 
   const fetchProducts = useCallback(async () => {
     const { data } = await commerce.products.list()
@@ -46,6 +48,27 @@ const AppProvider = ({ children }) => {
     setCart(cart)
   }
 
+  const refreshCart = async () => {
+    const newCart = await commerce.cart.refresh()
+
+    setCart(newCart)
+  }
+
+  const handleCaptureCheckout = async (checkoutTokenId, newOrder) => {
+    try {
+      const incomingOrder = await commerce.checkout.capture(
+        checkoutTokenId,
+        newOrder
+      )
+
+      setOrder(incomingOrder)
+
+      refreshCart()
+    } catch (error) {
+      setErrorMessage(error.data.error.message)
+    }
+  }
+
   return (
     <AppContext.Provider
       value={{
@@ -53,10 +76,13 @@ const AppProvider = ({ children }) => {
         setProducts,
         cart,
         setCart,
+        order,
+        errorMessage,
         handleAddToCart,
         handleUpdateCartQty,
         handleRemoveFromCart,
         handleEmptyCart,
+        handleCaptureCheckout,
       }}
     >
       {children}

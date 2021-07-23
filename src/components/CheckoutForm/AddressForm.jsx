@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import {
   InputLabel,
   Select,
@@ -21,13 +21,13 @@ const AddressForm = ({ checkoutToken, next }) => {
   const [shippingOptions, setShippingOptions] = useState([])
   const [shippingOption, setShippingOption] = useState('')
 
-  const fetchShippingCountries = async (checkoutTokenId) => {
+  const fetchShippingCountries = useCallback(async (checkoutTokenId) => {
     const { countries } = await commerce.services.localeListShippingCountries(
       checkoutTokenId
     )
     setShippingCountries(countries)
     setShippingCountry(Object.keys(countries)[0])
-  }
+  }, [])
 
   const fetchSubdivisions = async (countryCode) => {
     const { subdivisions } = await commerce.services.localeListSubdivisions(
@@ -54,7 +54,7 @@ const AddressForm = ({ checkoutToken, next }) => {
 
   useEffect(() => {
     fetchShippingCountries(checkoutToken.id)
-  }, [])
+  }, [fetchShippingCountries])
 
   useEffect(() => {
     if (shippingCountry) fetchSubdivisions(shippingCountry)
@@ -72,7 +72,7 @@ const AddressForm = ({ checkoutToken, next }) => {
   return (
     <>
       <Typography variant='h6' gutterBottom>
-        Shipping Address
+        Shipping address
       </Typography>
       <FormProvider {...methods}>
         <form
@@ -88,50 +88,44 @@ const AddressForm = ({ checkoutToken, next }) => {
           <Grid container spacing={3}>
             <FormInput name='firstName' label='First name' />
             <FormInput name='lastName' label='Last name' />
-            <FormInput name='address1' label='Address' />
+            <FormInput name='address1' label='Address line 1' />
             <FormInput name='email' label='Email' />
             <FormInput name='city' label='City' />
             <FormInput name='zip' label='Zip / Postal code' />
             <Grid item xs={12} sm={6}>
-              <InputLabel>Country</InputLabel>
+              <InputLabel>Shipping Country</InputLabel>
               <Select
                 value={shippingCountry}
                 fullWidth
                 onChange={(e) => setShippingCountry(e.target.value)}
               >
                 {Object.entries(shippingCountries)
-                  .map(([code, name]) => ({
-                    id: code,
-                    label: name,
-                  }))
-                  .map((country) => (
-                    <MenuItem key={country.id} value={country.id}>
-                      {country.label}
+                  .map(([code, name]) => ({ id: code, label: name }))
+                  .map((item) => (
+                    <MenuItem key={item.id} value={item.id}>
+                      {item.label}
                     </MenuItem>
                   ))}
               </Select>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <InputLabel>State</InputLabel>
+              <InputLabel>Shipping Subdivision</InputLabel>
               <Select
                 value={shippingSubdivision}
                 fullWidth
                 onChange={(e) => setShippingSubdivision(e.target.value)}
               >
                 {Object.entries(shippingSubdivisions)
-                  .map(([code, name]) => ({
-                    id: code,
-                    label: name,
-                  }))
-                  .map((subdivision) => (
-                    <MenuItem key={subdivision.id} value={subdivision.id}>
-                      {subdivision.label}
+                  .map(([code, name]) => ({ id: code, label: name }))
+                  .map((item) => (
+                    <MenuItem key={item.id} value={item.id}>
+                      {item.label}
                     </MenuItem>
                   ))}
               </Select>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <InputLabel>Shipping Option</InputLabel>
+              <InputLabel>Shipping Options</InputLabel>
               <Select
                 value={shippingOption}
                 fullWidth
@@ -142,9 +136,9 @@ const AddressForm = ({ checkoutToken, next }) => {
                     id: sO.id,
                     label: `${sO.description} - (${sO.price.formatted_with_code})`,
                   }))
-                  .map((option) => (
-                    <MenuItem key={option.id} value={option.id}>
-                      {option.label}
+                  .map((item) => (
+                    <MenuItem key={item.id} value={item.id}>
+                      {item.label}
                     </MenuItem>
                   ))}
               </Select>
@@ -152,7 +146,7 @@ const AddressForm = ({ checkoutToken, next }) => {
           </Grid>
           <br />
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Button component={Link} to='/cart' variant='outlined'>
+            <Button component={Link} variant='outlined' to='/cart'>
               Back to Cart
             </Button>
             <Button type='submit' variant='contained' color='primary'>
